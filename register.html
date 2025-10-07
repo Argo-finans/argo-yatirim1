@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kayıt Ol - Argo Yatırım</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      background-color: #161b22;
+      padding: 15px 0;
+      text-align: center;
+      color: #00bcd4;
+      font-size: 24px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    form {
+      background-color: #161b22;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 400px;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    button {
+      background-color: #238636;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #2ea043;
+    }
+  </style>
+</head>
+<body>
+  <header>Argo Yatırım - Kayıt Ol</header>
+
+  <form>
+    <label>Ad Soyad</label>
+    <input type="text" placeholder="Adınız Soyadınız" required />
+
+    <label>Ülke Kodu</label>
+    <select required>
+      <option value="+90">🇹🇷 Türkiye (+90)</option>
+      <option value="+31">🇳🇱 Hollanda (+31)</option>
+      <option value="+971">🇦🇪 Dubai (+971)</option>
+      <option value="+1">🇺🇸 ABD (+1)</option>
+      <option value="+44">🇬🇧 İngiltere (+44)</option>
+    </select>
+
+    <label>Telefon Numarası</label>
+    <input type="tel" placeholder="5xx xxx xx xx" required />
+
+    <label>Doğum Tarihi</label>
+    <input type="date" required />
+
+    <label>T.C. Kimlik / ID No</label>
+    <input type="text" placeholder="Kimlik Numaranız" required />
+
+    <label>E-posta</label>
+    <input type="email" placeholder="E-posta adresiniz" required />
+
+    <label>Şifre</label>
+    <input type="password" id="pass1" placeholder="Şifreniz" required minlength="6" />
+
+    <label>Şifre (Tekrar)</label>
+    <input type="password" id="pass2" placeholder="Şifrenizi tekrar girin" required minlength="6" />
+
+    <button type="submit">Kaydı Tamamla</button>
+  </form>
+
+  <script>
+    document.querySelector("form").addEventListener("submit", function(e){
+      const p1 = document.getElementById("pass1").value;
+      const p2 = document.getElementById("pass2").value;
+      const valid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+      if (!valid.test(p1)) {
+        alert("Şifre en az 6 karakter, bir büyük harf, bir küçük harf ve bir rakam içermelidir.");
+        e.preventDefault();
+      } else if (p1 !== p2) {
+        alert("Şifreler eşleşmiyor!");
+        e.preventDefault();
+      } else {
+        alert("Kayıt başarılı! (Demo sürüm)");
+      }
+    });
+  </script>
+</body>
+</html>
