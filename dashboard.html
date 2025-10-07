@@ -30,7 +30,7 @@
   <div class="ticker">
     <div>Dolar: <span id="usd" class="green">27.50</span></div>
     <div>Euro: <span id="eur" class="green">30.25</span></div>
-    <div>BTC: <span id="btc" class="green">60.000</span></div>
+    <div>BTC: <span id="btc" class="green">60000</span></div>
   </div>
 
   <!-- Kullanıcı Bilgileri -->
@@ -59,6 +59,7 @@
 </div>
 
 <script>
+window.onload = function() {
   // Kullanıcı bilgilerini göster
   const user = JSON.parse(localStorage.getItem("argoUser"));
   if(!user){ window.location.href="login.html"; }
@@ -69,7 +70,7 @@
   `;
 
   // Logout fonksiyonu
-  function logout(){
+  window.logout = function(){
     window.location.href="login.html";
   }
 
@@ -89,7 +90,7 @@
   const myChart = new Chart(ctx, { type: 'line', data: chartData, options: { scales: { y: { beginAtZero: false } } } });
 
   // Yatırım/çekim fonksiyonu
-  function invest(){
+  window.invest = function(){
     const amt = parseFloat(document.getElementById('amount').value);
     if(isNaN(amt)) return alert("Lütfen geçerli bir sayı girin!");
     balance += amt;
@@ -114,6 +115,7 @@
     btcEl.className = (parseFloat(btcEl.innerText)>60000?'green':'red');
   }
   setInterval(updateTicker, 2000);
+};
 </script>
 
 </body>
