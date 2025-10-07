@@ -62,12 +62,17 @@
     button:hover {
       background-color: #2ea043;
     }
+    #errorMsg {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <header>Argo Yatırım - Kayıt Ol</header>
 
-  <form>
+  <form id="registerForm">
     <label>Ad Soyad</label>
     <input type="text" placeholder="Adınız Soyadınız" required />
 
@@ -93,64 +98,67 @@
     <input type="email" placeholder="E-posta adresiniz" required />
 
     <label>Şifre</label>
-    <input type="password" id="pass1" placeholder="Şifreniz" required minlength="6" />
+    <div style="position:relative;">
+      <input type="password" id="pass1" placeholder="Şifreniz" required minlength="6" />
+      <span id="togglePass1" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; color:#ccc;">👁️</span>
+    </div>
 
     <label>Şifre (Tekrar)</label>
-    <input type="password" id="pass2" placeholder="Şifrenizi tekrar girin" required minlength="6" />
+    <div style="position:relative;">
+      <input type="password" id="pass2" placeholder="Şifrenizi tekrar girin" required minlength="6" />
+      <span id="togglePass2" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; color:#ccc;">👁️</span>
+    </div>
+
+    <div id="errorMsg"></div>
 
     <button type="submit">Kaydı Tamamla</button>
   </form>
 
   <script>
-    document.querySelector("form").addEventListener("submit", function(e){
-      const p1 = document.getElementById("pass1").value;
-      const p2 = document.getElementById("pass2").value;
-      const valid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-      if (!valid.test(p1)) {
-        alert("Şifre en az 6 karakter, bir büyük harf, bir küçük harf ve bir rakam içermelidir.");
-        e.preventDefault();
-      } else if (p1 !== p2) {
-        alert("Şifreler eşleşmiyor!");
-        e.preventDefault();
-      } else {
-        alert("Kayıt başarılı! (Demo sürüm)");
-      }
+    const errorMsg = document.getElementById("errorMsg");
+
+    // Göz ikonları
+    document.getElementById("togglePass1").addEventListener("click", function(){
+      const input = document.getElementById("pass1");
+      input.type = input.type === "password" ? "text" : "password";
     });
-  <script>
-document.querySelector("form").addEventListener("submit", function(e){
-  e.preventDefault(); // sayfanın yenilenmesini engelle
+    document.getElementById("togglePass2").addEventListener("click", function(){
+      const input = document.getElementById("pass2");
+      input.type = input.type === "password" ? "text" : "password";
+    });
 
-  // Form alanlarını al
-  const adSoyad = document.querySelector("input[placeholder='Adınız Soyadınız']").value;
-  const ulke = document.querySelector("select").value;
-  const telefon = document.querySelector("input[type='tel']").value;
-  const dogum = document.querySelector("input[type='date']").value;
-  const tc = document.querySelector("input[placeholder='Kimlik Numaranız']").value;
-  const email = document.querySelector("input[type='email']").value;
-  const sifre = document.getElementById("pass1").value;
-  const sifreTekrar = document.getElementById("pass2").value;
+    // Form submit
+    document.getElementById("registerForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      errorMsg.textContent = ""; // eski hatayı temizle
 
-  // Şifre doğrulama
-  const valid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-  if (!valid.test(sifre)) {
-    alert("Şifre en az 6 karakter, bir büyük harf, bir küçük harf ve bir rakam içermelidir.");
-    return;
-  }
-  if (sifre !== sifreTekrar) {
-    alert("Şifreler eşleşmiyor!");
-    return;
-  }
+      const adSoyad = document.querySelector("input[placeholder='Adınız Soyadınız']").value;
+      const ulke = document.querySelector("select").value;
+      const telefon = document.querySelector("input[type='tel']").value;
+      const dogum = document.querySelector("input[type='date']").value;
+      const tc = document.querySelector("input[placeholder='Kimlik Numaranız']").value;
+      const email = document.querySelector("input[type='email']").value;
+      const sifre = document.getElementById("pass1").value;
+      const sifreTekrar = document.getElementById("pass2").value;
 
-  // localStorage'a kaydet
-  const user = {
-    adSoyad, ulke, telefon, dogum, tc, email, sifre
-  };
-  localStorage.setItem("argoUser", JSON.stringify(user));
+      const valid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
-  alert("Kayıt başarılı! Giriş yapabilirsiniz.");
-  // giriş sayfasına yönlendir
-  window.location.href = "login.html";
-});
+      if (!valid.test(sifre)) {
+        errorMsg.textContent = "Şifre en az 6 karakter, bir büyük harf, bir küçük harf ve bir rakam içermelidir.";
+        return;
+      }
+      if (sifre !== sifreTekrar) {
+        errorMsg.textContent = "Şifreler eşleşmiyor!";
+        return;
+      }
+
+      // localStorage kaydet
+      const user = { adSoyad, ulke, telefon, dogum, tc, email, sifre };
+      localStorage.setItem("argoUser", JSON.stringify(user));
+
+      alert("Kayıt başarılı! Giriş yapabilirsiniz.");
+      window.location.href = "login.html";
+    });
   </script>
 </body>
 </html>
