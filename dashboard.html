@@ -1,122 +1,80 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Argo Yatırım Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Argo Yatırım (Test)</title>
 <style>
-  body { background-color:#0d1117; color:#e6edf3; font-family: Arial, sans-serif; margin:0; }
-  header { background-color:#161b22; padding:15px; text-align:center; font-size:24px; color:#00bcd4; box-shadow:0 0 10px rgba(0,0,0,0.5);}
-  .container { max-width:1200px; margin:20px auto; padding:10px; display:block; }
-  .ticker { display:flex; justify-content:space-around; background:#161b22; padding:10px; border-radius:10px; margin-bottom:20px; }
-  .ticker div { text-align:center; }
-  .green { color:#2ea043; } .red { color:#d73a49; }
-  .panel { background:#161b22; padding:20px; border-radius:10px; margin-bottom:20px; }
-  .panel h2 { color:#00bcd4; margin-top:0; }
-  .input-group { margin-bottom:10px; }
-  input { width:100%; padding:10px; border-radius:6px; border:1px solid #30363d; background:#0d1117; color:#e6edf3; margin-top:5px; }
-  button { background-color:#238636; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; margin-top:10px; }
-  button:hover { background-color:#2ea043; }
-  canvas { background:#0d1117; border-radius:10px; padding:10px; }
+  body{margin:0;background:#ffffff;color:#111;font:16px/1.6 Arial, sans-serif}
+  header{background:#0b1220;color:#f5c542;padding:14px 16px}
+  .wrap{max-width:800px;margin:0 auto;padding:0 16px}
+  main{padding:28px 0}
+  h1{margin:12px 0 10px}
+  .card{background:#f7f7f8;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin-top:14px}
+  .ok{color:#16a34a}
+  .err{color:#dc2626;font-weight:700}
+  .muted{color:#374151}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  a.btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;color:#111;border:1px solid #e5e7eb;background:#fff}
+  .whitebox{margin-top:14px;background:#fff;color:#111;padding:12px;border:2px dashed #111;border-radius:10px;font-weight:700}
 </style>
 </head>
 <body>
+<header><div class="wrap">
+  <strong>Argo Yatırım — Dashboard (Test Sürüm)</strong>
+</div></header>
 
-<header>Argo Yatırım - Dashboard</header>
-<div class="container">
+<main><div class="wrap">
+  <h1>Dashboard</h1>
+  <div id="status" class="card">Yükleniyor…</div>
 
-  <!-- Piyasa Ticker -->
-  <div class="ticker">
-    <div>Dolar: <span id="usd" class="green">27.50</span></div>
-    <div>Euro: <span id="eur" class="green">30.25</span></div>
-    <div>BTC: <span id="btc" class="green">60000</span></div>
+  <div class="card">
+    <h3>Kullanıcı Bilgileri</h3>
+    <div id="userInfo" class="muted">—</div>
   </div>
 
-  <!-- Kullanıcı Bilgileri -->
-  <div class="panel" id="userPanel">
-    <h2>Kullanıcı Bilgileri</h2>
-    <p id="userInfo"></p>
-    <button onclick="logout()">Çıkış Yap</button>
+  <div class="row">
+    <a class="btn" href="landing.html">Anasayfa</a>
+    <a class="btn" href="login.html">Giriş</a>
+    <a class="btn" href="register.html">Kayıt Ol</a>
   </div>
 
-  <!-- Bakiye ve Yatırım -->
-  <div class="panel">
-    <h2>Bakiyeniz ve Yatırım</h2>
-    <p>Bakiyeniz: <span id="balance">1000</span> USD</p>
-    <div class="input-group">
-      <input type="number" id="amount" placeholder="Yatırmak/Çekmek istediğiniz miktar">
-    </div>
-    <button onclick="invest()">Yatır/Çek</button>
-  </div>
-
-  <!-- Grafik -->
-  <div class="panel">
-    <h2>Yatırım Değeri Grafiği</h2>
-    <canvas id="chart" width="400" height="200"></canvas>
-  </div>
-
-</div>
+  <div class="whitebox">✔ Bu beyaz kutuyu görüyorsan sayfa kesin görünür.</div>
+</div></main>
 
 <script>
-window.onload = function() {
-  // Kullanıcı bilgilerini göster
-  const user = JSON.parse(localStorage.getItem("argoUser"));
-  if(!user){ window.location.href="login.html"; }
-  document.getElementById("userInfo").innerHTML = `
-    <strong>Ad Soyad:</strong> ${user.adSoyad}<br>
-    <strong>E-posta:</strong> ${user.email}<br>
-    <strong>Telefon:</strong> ${user.ulke} ${user.telefon}<br>
-  `;
+(function(){
+  const $status = document.getElementById('status');
+  const $info = document.getElementById('userInfo');
 
-  // Logout fonksiyonu
-  window.logout = function(){
-    window.location.href="login.html";
+  try {
+    const raw = localStorage.getItem('argoUser');
+    if(!raw){
+      $status.innerHTML = '<span class="err">KAYIT BULUNAMADI</span> — localStorage\\'da "argoUser" yok. Önce <strong>register.html</strong> ile kayıt ol, sonra <strong>login.html</strong> ile giriş yap.';
+      $info.textContent = '—';
+      return;
+    }
+    let user = null;
+    try { user = JSON.parse(raw); } catch (e) {}
+
+    if(!user || !user.email){
+      $status.innerHTML = '<span class="err">KULLANICI VERİSİ GEÇERSİZ</span> — JSON parse başarısız veya email yok.';
+      $info.textContent = '—';
+      return;
+    }
+
+    // Buraya kadar geldiysen veri var
+    $status.innerHTML = '<span class="ok">Hazır</span> — Kullanıcı verisi bulundu.';
+    $info.innerHTML = `
+      <div><strong>Ad Soyad:</strong> ${user.adSoyad || '-'}</div>
+      <div><strong>E-posta:</strong> ${user.email || '-'}</div>
+      <div><strong>Telefon:</strong> ${(user.ulke || '') + ' ' + (user.telefon || '-')}</div>
+    `;
+
+  } catch (err) {
+    $status.innerHTML = '<span class="err">JAVASCRIPT HATASI</span><br><span class="muted">'+ (err && err.message ? err.message : err) +'</span>';
+    $info.textContent = '—';
   }
-
-  // Başlangıç bakiye ve grafik verisi
-  let balance = 1000;
-  const ctx = document.getElementById('chart').getContext('2d');
-  const chartData = {
-    labels: [0],
-    datasets: [{
-      label: 'Yatırım Değeri',
-      data: [balance],
-      borderColor: '#00bcd4',
-      fill: false,
-      tension: 0.1
-    }]
-  };
-  const myChart = new Chart(ctx, { type: 'line', data: chartData, options: { scales: { y: { beginAtZero: false } } } });
-
-  // Yatırım/çekim fonksiyonu
-  window.invest = function(){
-    const amt = parseFloat(document.getElementById('amount').value);
-    if(isNaN(amt)) return alert("Lütfen geçerli bir sayı girin!");
-    balance += amt;
-    document.getElementById('balance').innerText = balance.toFixed(2);
-    chartData.labels.push(chartData.labels.length);
-    chartData.datasets[0].data.push(balance);
-    myChart.update();
-    document.getElementById('amount').value = '';
-  }
-
-  // Basit piyasa simülasyonu
-  function updateTicker(){
-    function randomChange(val){ return (val*(1+(Math.random()-0.5)/50)).toFixed(2); }
-    let usdEl = document.getElementById('usd');
-    let eurEl = document.getElementById('eur');
-    let btcEl = document.getElementById('btc');
-    usdEl.innerText = randomChange(parseFloat(usdEl.innerText));
-    usdEl.className = (parseFloat(usdEl.innerText)>27.5?'green':'red');
-    eurEl.innerText = randomChange(parseFloat(eurEl.innerText));
-    eurEl.className = (parseFloat(eurEl.innerText)>30?'green':'red');
-    btcEl.innerText = randomChange(parseFloat(btcEl.innerText));
-    btcEl.className = (parseFloat(btcEl.innerText)>60000?'green':'red');
-  }
-  setInterval(updateTicker, 2000);
-};
+})();
 </script>
-
 </body>
 </html>
