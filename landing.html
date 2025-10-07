@@ -1,54 +1,302 @@
+Anladım Gökhan. “Aynısı” derken: tasarım dili, düzen ve his olarak çok yakın; metin/görsel içerik birebir kopya olmaması gerekiyor. Sana tek dosyalık, koyu temalı, profesyonel, akıcı animasyonlu, ticker’lı, bölümleriyle zengin bir landing vereceğim. Yapı olarak paylaştığın siteye çok benzer hissiyat verir; ama içerik özgün. Giriş/Kayıt butonları mevcut sayfalarına gider.
+
+Aşağıdaki dosyayı landing.html içine tamamını yapıştır → Commit et → aç:
+https://argo-finans.github.io/argo-yatirim1/landing.html?v=5
+
+
+---
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Argo Yatırım — Landing (Basit Görünür)</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Argo Yatırım — Akıllı, Güvenli, Hızlı</title>
+<meta name="description" content="Argo Yatırım ile akıllı araçlar, düşük maliyet ve hızlı işlem deneyimi." />
 <style>
-  body { margin:0; background:#0f1220; color:#ffffff; font:16px/1.6 Arial, sans-serif; }
-  header { background:#171b2e; border-bottom:2px solid #2a3250; padding:14px 16px; }
-  .wrap { max-width:1100px; margin:0 auto; padding:0 16px; }
-  .row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .btn { display:inline-block; background:#e0a900; color:#141414; padding:10px 16px; border-radius:10px; font-weight:700; text-decoration:none; }
-  .btn.ghost { background:transparent; color:#fff; border:1px solid #2a3250; }
-  main { padding:40px 0; }
-  h1 { margin:0 0 10px; font-size:32px; }
-  p.lead { margin:0 0 16px; color:#cfd6e6; }
-  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; }
-  .card { background:#1b2140; border:1px solid #2a3250; border-radius:12px; padding:16px; }
-  .whitebox { margin-top:20px; background:#ffffff; color:#111; padding:16px; border-radius:12px; font-weight:700; }
-  footer { border-top:2px solid #2a3250; padding:18px 0; color:#cfd6e6; margin-top:30px; }
-  @media (max-width:960px){ .grid{ grid-template-columns:1fr } }
+  /* ================== TEMA ================== */
+  :root{
+    --bg:#0b1220; --fg:#e9eef6; --muted:#9aa6b2;
+    --panel:#121a2b; --panel2:#0f1726; --line:#243046;
+    --accent:#f5c542; --accent2:#ffdf7e;
+    --btn:#e0a900; --btn-hover:#f0b600;
+    --up:#18c964; --down:#ff5964;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font:15.5px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;height:auto;display:block}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 18px}
+  .pill{border:1px solid var(--line);color:var(--muted);padding:6px 10px;border-radius:999px}
+
+  /* ================== HEADER ================== */
+  header{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.88);backdrop-filter:saturate(130%) blur(8px);border-bottom:1px solid var(--line)}
+  .nav{height:66px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px}
+  .badge{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:var(--shadow)}
+  .links{display:flex;gap:12px;align-items:center}
+  .btn{background:var(--btn);color:#141414;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer;display:inline-block}
+  .btn:hover{background:var(--btn-hover)}
+  .ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+
+  /* ================== HERO ================== */
+  .hero{
+    padding:84px 0 28px;
+    background:
+      radial-gradient(900px 500px at 85% -10%,rgba(245,197,66,.09),transparent 60%),
+      radial-gradient(700px 420px at 10% -10%,rgba(245,197,66,.06),transparent 60%);
+  }
+  .hero h1{font-size:40px;line-height:1.15;margin:0 0 10px}
+  .lead{color:var(--muted);max-width:760px;margin:0 0 16px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+
+  /* ================== TICKER ================== */
+  .ticker{margin:22px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:auto;white-space:nowrap}
+  .ticker ul{display:flex;gap:22px;list-style:none;margin:0;padding:10px 14px}
+  .chip{display:inline-flex;gap:10px;align-items:center;padding:6px 12px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);font-size:14px}
+  .up{color:var(--up)} .dn{color:var(--down)}
+
+  /* ================== BÖLÜMLER ================== */
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  h2.sec{font-size:28px;margin:0 0 18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 8px}
+  .muted{color:var(--muted)}
+
+  /* ================== PRICING ================== */
+  .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .price{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .price .tag{font-size:12px;color:#141414;background:var(--accent);display:inline-block;padding:4px 10px;border-radius:8px;font-weight:800}
+  .price h3{margin:10px 0 6px}
+  .price .amt{font-size:28px;margin:8px 0 12px;color:var(--accent2)}
+  .price ul{margin:0;padding-left:18px;color:var(--muted)}
+  .price .btn{width:100%}
+
+  /* ================== FAQ ================== */
+  .faq .item{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel)}
+  .faq .q{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .faq .a{display:none;color:var(--muted);padding-top:8px}
+
+  /* ================== FOOTER ================== */
+  footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted)}
+
+  /* ================== RESPONSIVE ================== */
+  @media (max-width:1100px){ .grid-6{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:960px){
+    .grid-4{grid-template-columns:1fr 1fr}
+    .grid-3{grid-template-columns:1fr}
+    .pricing{grid-template-columns:1fr}
+    .grid-6{grid-template-columns:1fr 1fr}
+    .hero h1{font-size:34px}
+  }
+
+  /* Küçük animasyonlar */
+  .fade-in{animation:fade .6s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
+<!-- ================== HEADER ================== -->
 <header>
-  <div class="wrap row">
-    <strong>Argo Yatırım (Landing)</strong>
-    <div class="row">
+  <div class="wrap nav">
+    <div class="brand"><span class="badge"></span> Argo Yatırım</div>
+    <nav class="links">
+      <a class="pill" href="#markets">Piyasalar</a>
+      <a class="pill" href="#services">Hizmetler</a>
+      <a class="pill" href="#accounts">Hesaplar</a>
+      <a class="pill" href="#faq">SSS</a>
       <a class="btn ghost" href="login.html">Giriş</a>
       <a class="btn" href="register.html">Kayıt Ol</a>
-    </div>
+    </nav>
   </div>
 </header>
 
-<main>
-  <div class="wrap">
-    <h1>Hoş geldiniz</h1>
-    <p class="lead">Bu basit sürüm, “siyah ekran”ı ayıklamak için görünürlüğü garanti eder.</p>
-    <div class="grid">
-      <div class="card">Kart 1 — Görünüyor mu?</div>
-      <div class="card">Kart 2 — Görünüyor mu?</div>
-      <div class="card">Kart 3 — Görünüyor mu?</div>
+<!-- ================== HERO ================== -->
+<main class="hero">
+  <div class="wrap fade-in">
+    <h1>Akıllı araçlarla <span style="color:var(--accent)">güvenli</span> yatırım</h1>
+    <p class="lead">Düşük maliyet, yüksek hız ve kullanıcı dostu deneyim. Yeni başlayanlardan profesyonellere kadar herkes için tasarlandı.</p>
+    <div class="cta">
+      <a class="btn" href="register.html">Hemen Başla</a>
+      <a class="btn ghost" href="login.html">Hesabın var mı?</a>
     </div>
 
-    <!-- Tanıdık, beyaz bir kutu: görünürlük işareti -->
-    <div class="whitebox">✔ Bu beyaz kutuyu görüyorsan sayfa kesin görünür.</div>
+    <!-- TICKER -->
+    <div class="ticker">
+      <ul id="ticker"></ul>
+    </div>
   </div>
 </main>
 
+<!-- ================== FEATURES ================== -->
+<section id="features">
+  <div class="wrap">
+    <h2 class="sec">Öne Çıkan Özellikler</h2>
+    <div class="grid-6">
+      <div class="card"><h3>Hızlı Emir</h3><p class="muted">Milisaniye gecikme.</p></div>
+      <div class="card"><h3>Düşük Spread</h3><p class="muted">Rekabetçi fiyatlama.</p></div>
+      <div class="card"><h3>Güvenlik</h3><p class="muted">2FA & ayrık saklama.</p></div>
+      <div class="card"><h3>Gelişmiş Grafik</h3><p class="muted">100+ indikatör.</p></div>
+      <div class="card"><h3>Mobil Deneyim</h3><p class="muted">Her an, her yerde.</p></div>
+      <div class="card"><h3>7/24 Destek</h3><p class="muted">Uzman ekiple.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== MARKETS / CARDS ================== -->
+<section id="markets">
+  <div class="wrap">
+    <h2 class="sec">Piyasalardan Örnekler</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>BIST 100</h3>
+        <p>Fiyat: <strong id="m1p">9450.00</strong> <span id="m1c" class="up">+0.42%</span></p>
+      </div>
+      <div class="card">
+        <h3>USD/TRY</h3>
+        <p>Fiyat: <strong id="m2p">32.24</strong> <span id="m2c" class="up">+0.15%</span></p>
+      </div>
+      <div class="card">
+        <h3>BTC/USD</h3>
+        <p>Fiyat: <strong id="m3p">63240</strong> <span id="m3c" class="dn">-1.14%</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== SERVICES ================== -->
+<section id="services">
+  <div class="wrap">
+    <h2 class="sec">Hizmetler</h2>
+    <div class="grid-4">
+      <div class="card"><h3>Forex & Emtia</h3><p class="muted">Majör/minör pariteler, altın/gümüş…</p></div>
+      <div class="card"><h3>Hisse & Endeks</h3><p class="muted">Global borsalara erişim.</p></div>
+      <div class="card"><h3>Kripto</h3><p class="muted">Popüler coin’lerde hızlı işlem.</p></div>
+      <div class="card"><h3>Fon & Portföy</h3><p class="muted">Profesyonel yönetim.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ACCOUNTS / PRICING ================== -->
+<section id="accounts">
+  <div class="wrap">
+    <h2 class="sec">Hesap Tipleri</h2>
+    <div class="pricing">
+      <div class="price">
+        <span class="tag">Silver</span>
+        <h3>Başlangıç</h3>
+        <div class="amt">$250</div>
+        <ul>
+          <li>Temel analiz</li><li>Düşük spread</li><li>7/24 destek</li>
+        </ul>
+        <a class="btn" href="register.html">Hesap Aç</a>
+      </div>
+      <div class="price">
+        <span class="tag">Gold</span>
+        <h3>Gelişmiş</h3>
+        <div class="amt">$1,000</div>
+        <ul>
+          <li>Premium sinyal</li><li>Öncelikli destek</li><li>Geniş ürün seti</li>
+        </ul>
+        <a class="btn" href="register.html">Hesap Aç</a>
+      </div>
+      <div class="price">
+        <span class="tag">Platinum</span>
+        <h3>Profesyonel</h3>
+        <div class="amt">$10,000</div>
+        <ul>
+          <li>VIP yönetici</li><li>Özel webinar</li><li>Özel şartlar</li>
+        </ul>
+        <a class="btn" href="register.html">Hesap Aç</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FAQ ================== -->
+<section id="faq" class="faq">
+  <div class="wrap">
+    <h2 class="sec">Sık Sorulanlar</h2>
+    <div class="grid-3">
+      <div class="item">
+        <div class="q"><strong>Risk var mı?</strong><span>+</span></div>
+        <div class="a">Piyasalar risk içerir; risk yönetimi kritik önemdedir. Geçmiş performans gelecek için garanti değildir.</div>
+      </div>
+      <div class="item">
+        <div class="q"><strong>Ücretler nasıl?</strong><span>+</span></div>
+        <div class="a">Spread/swap/komisyon enstrümana ve hesap tipine göre değişir. Ücretlendirme sayfasından takip edebilirsiniz.</div>
+      </div>
+      <div class="item">
+        <div class="q"><strong>Nasıl başlanır?</strong><span>+</span></div>
+        <div class="a">Kayıt olun, kimlik doğrulamasını tamamlayın ve ilk fonlamayı yapın; ardından işlem platformuna erişin.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
 <footer>
-  <div class="wrap">© 2025 Argo Yatırım</div>
+  <div class="wrap">© 2025 Argo Yatırım — Tüm hakları saklıdır.</div>
 </footer>
+
+<script>
+  // ====== SENTETİK TICKER (gerçek veri değildir) ======
+  const rows = [
+    {s:"BIST 100", p:9450.00, d:+0.42},
+    {s:"USD/TRY", p:32.24, d:+0.15},
+    {s:"EUR/TRY", p:35.12, d:-0.08},
+    {s:"BTC/USD", p:63240, d:-1.14},
+    {s:"XAU/USD", p:2345, d:+0.17}
+  ];
+  const $tick = document.getElementById('ticker');
+  function drawTicker(){
+    $tick.innerHTML = rows.map(x=>{
+      const cls = x.d>=0 ? 'up' : 'dn';
+      const sign = x.d>=0 ? '+' : '';
+      return `<li class="chip"><strong>${x.s}</strong><span>${x.p}</span><span class="${cls}">${sign}${x.d}%</span></li>`;
+    }).join('');
+  }
+  function jiggle(){
+    rows.forEach(x=>{
+      const delta=(Math.random()-0.5)*0.6; // ±0.3%
+      x.d=Math.max(Math.min(x.d+delta,3),-3);
+      x.p=+(x.p*(1+delta/100)).toFixed(2);
+    });
+    drawTicker();
+  }
+  drawTicker(); setInterval(jiggle, 2200);
+
+  // ====== FAQ akordeon ======
+  document.querySelectorAll('.faq .q').forEach(q=>{
+    q.addEventListener('click', ()=>{
+      const a = q.parentElement.querySelector('.a');
+      const open = a.style.display==='block';
+      a.style.display = open ? 'none' : 'block';
+      q.querySelector('span').textContent = open ? '+' : '−';
+    });
+  });
+</script>
 </body>
 </html>
+
+
+---
+
+Sonraki adımlar (istersen):
+
+Bu sayfayı ana sayfa yapmak için dosya adını index.html yapabiliriz (veya kopyasını alıp index.html koy). O zaman doğrudan repo linkinle açılır.
+
+Renk paletini farklı istiyorsan (ör. “Kömür + Mavi”), en baştaki :root{} içindeki renkleri değiştirerek tek hamlede tüm temayı değiştiririz.
+
+Header’a “Canlı Destek”, “Hakkımızda”, “İletişim” gibi ek sekmeler koyabilirim.
+
+Eğer “dashboard’a girişten sonra otomatik götür” istersen, login’den sonra window.location.href='dashboard.html' zaten var. Dashboard’u da bir önceki stabil sürümle beyaz zeminli ve çalışır halde bıraktık.
+
+
+“Yapıştırdım, görünüyor” dersen, istediğin ek/çıkarmaları hızlıca kodun içinde işaretleyip güncellerim.
+
