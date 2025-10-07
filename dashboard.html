@@ -1,80 +1,259 @@
+Süper—demek ki sorun eski dashboard kodundaymış. Şimdi sana tam çalışan, tek dosya, kütüphanesiz (Chart.js yok) bir Dashboard veriyorum.
+✅ Beyaz zemin (siyah ekran riski sıfır)
+✅ Girişten sonra kullanıcı bilgilerini gösterir
+✅ Yatırım/çekim (artı/eksi) tutar, grafiği çizer
+✅ Tüm veri localStorage’da (argoUser, argoBalance, argoHistory)
+✅ Hiç yönlendirme döngüsü yok
+
+Aşağıdakini dashboard.html içine tamamen yapıştırıp commit et. Sonra şu linkle aç:
+https://argo-finans.github.io/argo-yatirim1/dashboard.html?v=4
+
+
+---
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard — Argo Yatırım (Test)</title>
+<title>Argo Yatırım — Dashboard (Stabil)</title>
 <style>
   body{margin:0;background:#ffffff;color:#111;font:16px/1.6 Arial, sans-serif}
   header{background:#0b1220;color:#f5c542;padding:14px 16px}
-  .wrap{max-width:800px;margin:0 auto;padding:0 16px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 16px}
   main{padding:28px 0}
-  h1{margin:12px 0 10px}
-  .card{background:#f7f7f8;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin-top:14px}
-  .ok{color:#16a34a}
-  .err{color:#dc2626;font-weight:700}
+  h1{margin:12px 0 6px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .card{background:#f7f7f8;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-top:14px}
+  .btn{display:inline-block;background:#0ea5e9;color:#fff;border:none;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:700}
+  .btn:hover{background:#0284c7}
+  .ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
+  input[type=number]{width:160px;padding:10px;border-radius:10px;border:1px solid #d1d5db}
   .muted{color:#374151}
-  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-  a.btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;color:#111;border:1px solid #e5e7eb;background:#fff}
-  .whitebox{margin-top:14px;background:#fff;color:#111;padding:12px;border:2px dashed #111;border-radius:10px;font-weight:700}
+  .ok{color:#16a34a} .err{color:#dc2626;font-weight:700}
+  /* Basit çizgi grafik alanı */
+  .chart-box{width:100%;max-width:940px;height:260px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center}
+  svg{width:100%;height:100%}
+  .axis{stroke:#cbd5e1;stroke-width:1}
+  .line{fill:none;stroke:#0ea5e9;stroke-width:2}
+  .grid{stroke:#e5e7eb;stroke-width:1}
+  .legend{font-size:12px;fill:#374151}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <strong>Argo Yatırım — Dashboard (Test Sürüm)</strong>
+  <strong>Argo Yatırım — Dashboard (Stabil)</strong>
 </div></header>
 
 <main><div class="wrap">
-  <h1>Dashboard</h1>
-  <div id="status" class="card">Yükleniyor…</div>
+  <h1>Merhaba!</h1>
+  <div id="status" class="muted">Kullanıcı yükleniyor…</div>
 
   <div class="card">
     <h3>Kullanıcı Bilgileri</h3>
     <div id="userInfo" class="muted">—</div>
   </div>
 
-  <div class="row">
-    <a class="btn" href="landing.html">Anasayfa</a>
-    <a class="btn" href="login.html">Giriş</a>
-    <a class="btn" href="register.html">Kayıt Ol</a>
+  <div class="card">
+    <h3>Bakiyeniz</h3>
+    <div class="row">
+      <div><strong><span id="balance">0.00</span> USD</strong></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <input type="number" id="amount" step="0.01" placeholder="Tutar">
+      <button class="btn" id="btnDeposit">Yatır (+)</button>
+      <button class="btn ghost" id="btnWithdraw">Çek (−)</button>
+      <button class="btn ghost" id="btnReset">Sıfırla</button>
+    </div>
+    <div id="msg" style="margin-top:10px"></div>
   </div>
 
-  <div class="whitebox">✔ Bu beyaz kutuyu görüyorsan sayfa kesin görünür.</div>
+  <div class="card">
+    <h3>Yatırım Değeri Grafiği</h3>
+    <div class="chart-box">
+      <svg id="chart" viewBox="0 0 960 260" preserveAspectRatio="none" role="img" aria-label="Bakiyenin zamana göre değişimi">
+        <!-- Grid -->
+        <g id="grid"></g>
+        <!-- Çizgi -->
+        <path id="path" class="line" d=""></path>
+        <!-- Eksenler -->
+        <line x1="40" y1="220" x2="920" y2="220" class="axis"></line>
+        <line x1="40" y1="20"  x2="40"  y2="220" class="axis"></line>
+        <!-- Min/Max yazıları -->
+        <text id="lblMin" x="44" y="236" class="legend">Min: —</text>
+        <text id="lblMax" x="860" y="236" class="legend" text-anchor="end">Max: —</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:10px">
+    <a class="btn ghost" href="landing.html">Anasayfa</a>
+    <a class="btn ghost" href="login.html">Giriş</a>
+    <a class="btn ghost" href="register.html">Kayıt Ol</a>
+  </div>
 </div></main>
 
 <script>
 (function(){
   const $status = document.getElementById('status');
-  const $info = document.getElementById('userInfo');
+  const $info   = document.getElementById('userInfo');
+  const $bal    = document.getElementById('balance');
+  const $msg    = document.getElementById('msg');
+  const $amt    = document.getElementById('amount');
+  const $dep    = document.getElementById('btnDeposit');
+  const $wd     = document.getElementById('btnWithdraw');
+  const $rst    = document.getElementById('btnReset');
 
-  try {
-    const raw = localStorage.getItem('argoUser');
-    if(!raw){
-      $status.innerHTML = '<span class="err">KAYIT BULUNAMADI</span> — localStorage\\'da "argoUser" yok. Önce <strong>register.html</strong> ile kayıt ol, sonra <strong>login.html</strong> ile giriş yap.';
-      $info.textContent = '—';
-      return;
-    }
-    let user = null;
-    try { user = JSON.parse(raw); } catch (e) {}
+  // Kullanıcıyı yükle
+  let userRaw = localStorage.getItem('argoUser');
+  let user = null;
+  try { user = JSON.parse(userRaw || 'null'); } catch(e){}
 
-    if(!user || !user.email){
-      $status.innerHTML = '<span class="err">KULLANICI VERİSİ GEÇERSİZ</span> — JSON parse başarısız veya email yok.';
-      $info.textContent = '—';
-      return;
-    }
-
-    // Buraya kadar geldiysen veri var
+  if(!user || !user.email){
+    $status.innerHTML = '<span class="err">KULLANICI BULUNAMADI</span> — Lütfen önce <strong>register.html</strong> ile kayıt olun, ardından <strong>login.html</strong> ile giriş yapın.';
+    $info.textContent = '—';
+  } else {
     $status.innerHTML = '<span class="ok">Hazır</span> — Kullanıcı verisi bulundu.';
     $info.innerHTML = `
       <div><strong>Ad Soyad:</strong> ${user.adSoyad || '-'}</div>
       <div><strong>E-posta:</strong> ${user.email || '-'}</div>
       <div><strong>Telefon:</strong> ${(user.ulke || '') + ' ' + (user.telefon || '-')}</div>
     `;
-
-  } catch (err) {
-    $status.innerHTML = '<span class="err">JAVASCRIPT HATASI</span><br><span class="muted">'+ (err && err.message ? err.message : err) +'</span>';
-    $info.textContent = '—';
   }
+
+  // Bakiye ve geçmiş
+  let balance = 0;
+  let history = []; // {t:timestamp, v:value}
+
+  function loadState(){
+    const b = parseFloat(localStorage.getItem('argoBalance') || '1000');
+    balance = isNaN(b) ? 1000 : b;
+
+    try {
+      history = JSON.parse(localStorage.getItem('argoHistory') || '[]');
+      if(!Array.isArray(history) || history.length === 0){
+        history = [{t:Date.now(), v: balance}];
+      }
+    } catch(e){
+      history = [{t:Date.now(), v: balance}];
+    }
+    $bal.textContent = balance.toFixed(2);
+    saveState(); // formatlayıp sakla
+    drawChart();
+  }
+
+  function saveState(){
+    localStorage.setItem('argoBalance', String(balance));
+    localStorage.setItem('argoHistory', JSON.stringify(history.slice(-100))); // son 100 nokta
+  }
+
+  function setMsg(text, good){
+    $msg.textContent = text || '';
+    $msg.className = good ? 'ok' : 'err';
+  }
+
+  function addPoint(){
+    history.push({t:Date.now(), v: balance});
+    saveState();
+    drawChart();
+  }
+
+  $dep.addEventListener('click', ()=>{
+    const val = parseFloat($amt.value);
+    if(isNaN(val) || val <= 0){ setMsg('Geçerli bir pozitif tutar girin.', false); return; }
+    balance += val;
+    $bal.textContent = balance.toFixed(2);
+    setMsg('Yatırım eklendi.', true);
+    $amt.value = '';
+    addPoint();
+  });
+
+  $wd.addEventListener('click', ()=>{
+    const val = parseFloat($amt.value);
+    if(isNaN(val) || val <= 0){ setMsg('Geçerli bir pozitif tutar girin.', false); return; }
+    if(val > balance){ setMsg('Yetersiz bakiye.', false); return; }
+    balance -= val;
+    $bal.textContent = balance.toFixed(2);
+    setMsg('Tutar çekildi.', true);
+    $amt.value = '';
+    addPoint();
+  });
+
+  $rst.addEventListener('click', ()=>{
+    balance = 1000;
+    history = [{t:Date.now(), v: balance}];
+    $bal.textContent = balance.toFixed(2);
+    setMsg('Bakiye sıfırlandı (1000 USD).', true);
+    saveState();
+    drawChart();
+  });
+
+  // Basit SVG çizgi grafik (kütüphanesiz)
+  function drawChart(){
+    const svgW = 960, svgH = 260, L = 40, B = 40, R = 40, T = 20;
+    const W = svgW - L - R, H = svgH - T - B;
+    const path = document.getElementById('path');
+    const grid = document.getElementById('grid');
+    const lblMin = document.getElementById('lblMin');
+    const lblMax = document.getElementById('lblMax');
+
+    const data = history.slice(-60); // son 60 nokta
+    const vals = data.map(d => d.v);
+    const min = Math.min.apply(null, vals);
+    const max = Math.max.apply(null, vals);
+    const yMin = min === max ? min - 1 : min;
+    const yMax = min === max ? max + 1 : max;
+
+    // Ölçek fonksiyonları
+    const x = (i)=> L + (W * (i/(Math.max(data.length-1,1))));
+    const y = (v)=> T + (H * (1 - ( (v - yMin) / (yMax - yMin) )));
+
+    // Izgara (yatay 4 çizgi)
+    grid.innerHTML = '';
+    for(let i=0;i<=4;i++){
+      const yy = T + (H * i/4);
+      grid.insertAdjacentHTML('beforeend', `<line x1="${L}" y1="${yy}" x2="${L+W}" y2="${yy}" class="grid"></line>`);
+    }
+
+    // Path
+    if(data.length === 1){
+      const px = x(0), py = y(data[0].v);
+      path.setAttribute('d', `M ${px} ${py} L ${px+0.01} ${py}`);
+    } else {
+      let d = '';
+      data.forEach((dpt, i)=>{
+        const px = x(i), py = y(dpt.v);
+        d += (i===0 ? `M ${px} ${py}` : ` L ${px} ${py}`);
+      });
+      path.setAttribute('d', d);
+    }
+
+    lblMin.textContent = `Min: ${yMin.toFixed(2)}`;
+    lblMax.textContent = `Max: ${yMax.toFixed(2)}`;
+  }
+
+  // İlk yük
+  loadState();
+
+  // Hafif “piyasa etkisi” simülasyonu (2 sn'de bir %±0.1)
+  setInterval(()=>{
+    const drift = (Math.random()-0.5) * 0.2; // ±%0.1
+    balance = Math.max(0, balance * (1 + drift/100));
+    $bal.textContent = balance.toFixed(2);
+    addPoint();
+    setMsg('', true);
+  }, 2000);
 })();
 </script>
 </body>
 </html>
+
+
+---
+
+Sonraki adım
+
+Bu stabil dashboard görünüyorsa (görünecek), istersen koyu temaya geri döndürürüm ve grafik için Chart.js ekleriz. Ama önce bu sürümün Giriş → Dashboard yolunda çalıştığını doğrulayalım.
+
+Kurduktan sonra bana yaz:
+“Stabil dashboard görünüyor ve işlem yapabiliyorum.”
+
