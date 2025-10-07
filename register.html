@@ -116,6 +116,42 @@
         alert("Kayıt başarılı! (Demo sürüm)");
       }
     });
-  </script>
+  <script>
+document.querySelector("form").addEventListener("submit", function(e){
+  e.preventDefault(); // sayfanın yenilenmesini engelle
+
+  // Form alanlarını al
+  const adSoyad = document.querySelector("input[placeholder='Adınız Soyadınız']").value;
+  const ulke = document.querySelector("select").value;
+  const telefon = document.querySelector("input[type='tel']").value;
+  const dogum = document.querySelector("input[type='date']").value;
+  const tc = document.querySelector("input[placeholder='Kimlik Numaranız']").value;
+  const email = document.querySelector("input[type='email']").value;
+  const sifre = document.getElementById("pass1").value;
+  const sifreTekrar = document.getElementById("pass2").value;
+
+  // Şifre doğrulama
+  const valid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+  if (!valid.test(sifre)) {
+    alert("Şifre en az 6 karakter, bir büyük harf, bir küçük harf ve bir rakam içermelidir.");
+    return;
+  }
+  if (sifre !== sifreTekrar) {
+    alert("Şifreler eşleşmiyor!");
+    return;
+  }
+
+  // localStorage'a kaydet
+  const user = {
+    adSoyad, ulke, telefon, dogum, tc, email, sifre
+  };
+  localStorage.setItem("argoUser", JSON.stringify(user));
+
+  alert("Kayıt başarılı! Giriş yapabilirsiniz.");
+  // giriş sayfasına yönlendir
+  window.location.href = "login.html";
+});
+</script>
+
 </body>
 </html>
