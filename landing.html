@@ -1,327 +1,71 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Argo Yatırım — Güvenli ve Akıllı Yatırım Deneyimi</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Argo Yatırım — Landing</title>
 <style>
-  /* ========= THEME (Lacivert + Altın) ========= */
   :root{
-    --bg:#0b1220; --fg:#e9eef6; --muted:#9aa6b2;
-    --panel:#121a2b; --panel-2:#0f1726;
-    --accent:#f5c542; --accent-2:#ffdf7e;
-    --btn:#e0a900; --btn-hover:#f0b600;
-    --up:#18c964; --down:#ff5964; --line:#243046;
-    --shadow:0 8px 24px rgba(0,0,0,.25);
+    --bg:#0f1220; --fg:#e8ecf5; --muted:#a7afbf;
+    --panel:#171b2e; --line:#232a42;
+    --accent:#f5c542; --btn:#e0a900; --btn-hover:#f0b600;
   }
-  /* (İstersen Kömür + Mavi) */
-  /*
-  :root{
-    --bg:#0e0f12; --fg:#e8ebf1; --muted:#9aa0a6;
-    --panel:#171a21; --panel-2:#12161c;
-    --accent:#3ea6ff; --accent-2:#76c0ff;
-    --btn:#2563eb; --btn-hover:#1d4ed8;
-    --up:#16a34a; --down:#ef4444; --line:#2a3340;
-    --shadow:0 8px 24px rgba(0,0,0,.25);
-  }
-  */
-
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
 
-  /* Header */
-  header{position:sticky;top:0;z-index:30;background:rgba(11,18,32,.8);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line)}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700}
-  .brand-badge{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:var(--shadow)}
-  .nav-links{display:flex;gap:18px;align-items:center}
-  .btn{background:var(--btn);color:#141414;padding:10px 16px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
+  header{position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line)}
+  .nav{height:64px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .badge{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#f5c542,#ffe08a)}
+  .actions{display:flex;gap:10px}
+  .btn{background:var(--btn);color:#141414;padding:10px 16px;border-radius:10px;font-weight:700}
   .btn:hover{background:var(--btn-hover)}
   .ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
-  .lang{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:center}
-  .pill{border:1px solid var(--line);padding:6px 10px;border-radius:999px;color:var(--muted)}
 
-  /* Hero */
-  .hero{padding:72px 0;background:
-    radial-gradient(1200px 500px at 80% -10%,rgba(245,197,66,.08),transparent 60%),
-    radial-gradient(800px 500px at 10% -20%,rgba(245,197,66,.06),transparent 60%)}
-  .hero h1{font-size:36px;line-height:1.2;margin:0 0 10px}
-  .hero p{color:var(--muted);max-width:720px}
-  .hero .cta{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .hero{padding:56px 0;border-bottom:1px solid var(--line)}
+  h1{margin:0 0 10px;font-size:32px;line-height:1.2}
+  p.lead{color:var(--muted);max-width:720px;margin:0 0 16px}
 
-  /* Ticker */
-  .ticker{margin:24px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:auto;white-space:nowrap}
-  .ticker ul{display:flex;gap:28px;list-style:none;margin:0;padding:12px 16px}
-  .chip{display:inline-flex;gap:10px;align-items:center;padding:6px 10px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);font-size:14px}
-  .chg-up{color:var(--up)} .chg-dn{color:var(--down)}
-
-  /* Sections */
-  section{padding:56px 0;border-top:1px solid var(--line)}
-  h2.sec{font-size:28px;margin:0 0 20px}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
-  .card h3{margin:0 0 8px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 6px}
   .muted{color:var(--muted)}
 
-  /* Pricing */
-  .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .price{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
-  .price .tag{font-size:13px;color:#141414;background:var(--accent);display:inline-block;padding:4px 10px;border-radius:8px;font-weight:700}
-  .price h3{margin:10px 0 6px}
-  .price .amt{font-size:28px;margin:8px 0 12px;color:var(--accent-2)}
-  .price ul{margin:0;padding-left:18px;color:var(--muted)}
-  .price .btn{width:100%}
+  footer{border-top:1px solid var(--line);padding:20px 0;color:var(--muted);margin-top:28px}
 
-  /* FAQ */
-  .faq .item{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel)}
-  .faq .q{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-  .faq .a{display:none;color:var(--muted);padding-top:8px}
-
-  /* Newsletter */
-  .newsletter{display:flex;gap:10px;flex-wrap:wrap}
-  .newsletter input{flex:1;min-width:220px;background:var(--panel);border:1px solid var(--line);color:var(--fg);padding:12px;border-radius:10px}
-  footer{padding:32px 0;color:var(--muted);border-top:1px solid var(--line)}
-  .logos{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
-  .logo{height:38px;border-radius:10px;background:var(--panel-2);border:1px dashed var(--line)}
-
-  @media (max-width:960px){
-    .grid-3{grid-template-columns:1fr}
-    .grid-4{grid-template-columns:1fr 1fr}
-    .pricing{grid-template-columns:1fr}
-  }
+  @media (max-width:960px){ .grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <div class="brand">
-      <span class="brand-badge"></span> Argo Yatırım
-    </div>
-    <nav class="nav-links">
-      <a href="#home" class="pill">Anasayfa</a>
-      <a href="#markets" class="pill">Piyasalar</a>
-      <a href="#services" class="pill">Hizmetler</a>
-      <a href="#pricing" class="pill">Hesap Tipleri</a>
-      <a href="#faq" class="pill">SSS</a>
-      <span class="lang">TR • EN</span>
-      <a class="btn ghost" href="login.html">Giriş</a>
+    <div class="brand"><span class="badge"></span> Argo Yatırım</div>
+    <div class="actions">
+      <a class="ghost btn" href="login.html">Giriş</a>
       <a class="btn" href="register.html">Kayıt Ol</a>
-    </nav>
+    </div>
   </div>
 </header>
 
-<main id="home" class="hero">
-  <div class="wrap">
-    <h1>Akıllı araçlarla <span style="color:var(--accent)">güvenli</span> yatırım</h1>
-    <p>Hızlı işlem, düşük maliyet ve kullanıcı dostu deneyim. Profesyonel araçlar; yeni başlayanlar için de anlaşılır arayüz.</p>
-    <div class="cta">
-      <a class="btn" href="register.html">Hemen Başla</a>
-      <a class="btn ghost" href="login.html">Hesabın var mı?</a>
-    </div>
+<main class="wrap hero">
+  <h1>Akıllı araçlarla <span style="color:var(--accent)">güvenli</span> yatırım</h1>
+  <p class="lead">Hızlı işlem, düşük maliyet, kullanıcı dostu deneyim. Basit arayüz, güçlü altyapı.</p>
+  <div class="actions" style="margin-top:8px">
+    <a class="btn" href="register.html">Hemen Başla</a>
+    <a class="ghost btn" href="login.html">Hesabın var mı?</a>
+  </div>
 
-    <!-- TICKER -->
-    <div class="ticker">
-      <ul id="ticker">
-        <!-- JS ile dolacak -->
-      </ul>
-    </div>
+  <div class="grid">
+    <div class="card"><h3>Hızlı</h3><p class="muted">Milisaniye emir iletimi.</p></div>
+    <div class="card"><h3>Güvenli</h3><p class="muted">2FA ve ayrışık saklama.</p></div>
+    <div class="card"><h3>Ekonomik</h3><p class="muted">Rekabetçi spread.</p></div>
   </div>
 </main>
 
-<section id="features">
-  <div class="wrap">
-    <h2 class="sec">Bizi Özel Kılanlar</h2>
-    <div class="grid-4">
-      <div class="card"><h3>Hızlı İşlem</h3><p class="muted">Düşük gecikme, milisaniye seviyesinde emir iletimi.</p></div>
-      <div class="card"><h3>Düşük Spread</h3><p class="muted">Rekabetçi fiyatlama ile verimli alım-satım.</p></div>
-      <div class="card"><h3>Güvenlik</h3><p class="muted">2FA, WAF ve ayrıştırılmış saklama katmanları.</p></div>
-      <div class="card"><h3>Gelişmiş Araçlar</h3><p class="muted">100+ indikatör ve çizim aracı desteği.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="markets">
-  <div class="wrap">
-    <h2 class="sec">Türkiye Piyasaları (örnek)</h2>
-    <div class="grid-3">
-      <div class="card">
-        <h3>Baykar <small class="muted">BAYKAR</small></h3>
-        <p>Fiyat: <strong id="m1p">368.84</strong> <span id="m1c" class="chg-dn">-0.57%</span></p>
-        <div class="logos"><div class="logo"></div></div>
-      </div>
-      <div class="card">
-        <h3>Koç Holding <small class="muted">KCHOL</small></h3>
-        <p>Fiyat: <strong id="m2p">108.52</strong> <span id="m2c" class="chg-dn">-0.93%</span></p>
-        <div class="logos"><div class="logo"></div></div>
-      </div>
-      <div class="card">
-        <h3>Aselsan <small class="muted">ASELS</small></h3>
-        <p>Fiyat: <strong id="m3p">441.27</strong> <span id="m3c" class="chg-up">+0.49%</span></p>
-        <div class="logos"><div class="logo"></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="services">
-  <div class="wrap">
-    <h2 class="sec">Hizmetler</h2>
-    <div class="grid-4">
-      <div class="card"><h3>Algoritmik Trading</h3><p class="muted">Kural bazlı otomasyon ve emir yürütme.</p></div>
-      <div class="card"><h3>Mobil Servisler</h3><p class="muted">Anlık takip ve hızlı işlem deneyimi.</p></div>
-      <div class="card"><h3>Fon İşlemleri</h3><p class="muted">Portföy çeşitlendirme ve raporlama.</p></div>
-      <div class="card"><h3>Forex & Türevler</h3><p class="muted">Döviz çiftleri, opsiyon/futures erişimi.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="roadmap">
-  <div class="wrap">
-    <h2 class="sec">Yol Haritası</h2>
-    <div class="grid-4">
-      <div class="card"><h3>Q1 — Temeller</h3><p class="muted">Çekirdek platform & güvenlik katmanları.</p></div>
-      <div class="card"><h3>Q2 — Araştırma</h3><p class="muted">Kullanıcı araştırması ve iyileştirme.</p></div>
-      <div class="card"><h3>Q3 — Geliştirme</h3><p class="muted">Grafikler ve uyarı sistemleri.</p></div>
-      <div class="card"><h3>Q4 — Lansman</h3><p class="muted">Optimizasyon ve ölçümleme.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="pricing">
-  <div class="wrap">
-    <h2 class="sec">Hesap Tipleri</h2>
-    <div class="pricing">
-      <div class="price">
-        <span class="tag">Silver</span>
-        <h3>Başlangıç</h3>
-        <div class="amt">$250</div>
-        <ul>
-          <li>Düşük spread</li><li>Temel analiz</li><li>7/24 destek</li>
-        </ul>
-        <a class="btn" href="register.html">Hesap Aç</a>
-      </div>
-      <div class="price">
-        <span class="tag">Gold</span>
-        <h3>Gelişmiş</h3>
-        <div class="amt">$1,000</div>
-        <ul>
-          <li>Düşük spread</li><li>Premium sinyaller</li><li>Öncelikli destek</li>
-        </ul>
-        <a class="btn" href="register.html">Hesap Aç</a>
-      </div>
-      <div class="price">
-        <span class="tag">Platinum</span>
-        <h3>Profesyonel</h3>
-        <div class="amt">$10,000</div>
-        <ul>
-          <li>VIP yönetici</li><li>Özel webinar</li><li>Özel şartlar</li>
-        </ul>
-        <a class="btn" href="register.html">Hesap Aç</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="testimonials">
-  <div class="wrap">
-    <h2 class="sec">Kullanıcı Deneyimleri</h2>
-    <div class="grid-3">
-      <div class="card"><h3>“Hızlı ve esnek!”</h3><p class="muted">Emir iletimi ışık hızında; portföy çeşitlendirme kolaylaştı.</p></div>
-      <div class="card"><h3>“Arayüz harika.”</h3><p class="muted">Yeni başlayan için bile anlaşılır; yine de güçlü araçlar var.</p></div>
-      <div class="card"><h3>“Destek iyi.”</h3><p class="muted">7/24 destek gerçekten iş görüyor.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="blog">
-  <div class="wrap">
-    <h2 class="sec">Makaleler</h2>
-    <div class="grid-3">
-      <div class="card"><h3>Destek / Direnç Temelleri</h3><p class="muted">Grafikte karar verme sanatı.</p></div>
-      <div class="card"><h3>Risk Yönetimi 101</h3><p class="muted">Sermayeyi korurken büyütmek.</p></div>
-      <div class="card"><h3>Piyasa Döngüleri</h3><p class="muted">Trendleri okumak ve uygulamak.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="faq" class="faq">
-  <div class="wrap">
-    <h2 class="sec">Sık Sorulan Sorular</h2>
-    <div class="grid-3">
-      <div class="item">
-        <div class="q"><strong>Devlet destekli mi?</strong><span>+</span></div>
-        <div class="a">Belirli teşvik programlarından yararlanılabilir; kapsam sözleşme ve duyurularda açıklanır.</div>
-      </div>
-      <div class="item">
-        <div class="q"><strong>Kayıp yaşayabilir miyim?</strong><span>+</span></div>
-        <div class="a">Piyasalarda her zaman risk vardır; risk yönetimi şarttır. Geçmiş performans gelecek için garanti değildir.</div>
-      </div>
-      <div class="item">
-        <div class="q"><strong>Ücretler nedir?</strong><span>+</span></div>
-        <div class="a">Spread/swap/komisyon enstrümana ve hesap tipine göre değişebilir; ücretlendirme sayfasında listelenir.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="newsletter">
-  <div class="wrap">
-    <h2 class="sec">Bültene Abone Ol</h2>
-    <div class="newsletter">
-      <input type="email" placeholder="E-posta adresiniz">
-      <button class="btn">Abone Ol</button>
-    </div>
-    <p class="muted" style="margin-top:10px">Eğitim ve platform haberleri için…</p>
-  </div>
-</section>
-
 <footer>
-  <div class="wrap">
-    © 2025 Argo Yatırım — Tüm hakları saklıdır.
-  </div>
+  <div class="wrap">© 2025 Argo Yatırım</div>
 </footer>
-
-<script>
-  // Basit sentetik ticker (gerçek veri değil)
-  const items = [
-    {s:"BIST 100", p:9450.00, d:+0.42},
-    {s:"USD/TRY", p:32.24, d:+0.15},
-    {s:"EUR/TRY", p:35.12, d:-0.08},
-    {s:"BTC/USD", p:63240, d:-1.14},
-    {s:"XAU/USD", p:2345, d:+0.17}
-  ];
-  const $ticker = document.getElementById('ticker');
-  function paintTicker(){
-    $ticker.innerHTML = items.map(x=>{
-      const cls = x.d>=0 ? 'chg-up' : 'chg-dn';
-      const sign = x.d>=0 ? '+' : '';
-      return `<li class="chip"><strong>${x.s}</strong> <span>${x.p}</span> <span class="${cls}">${sign}${x.d}%</span></li>`;
-    }).join('');
-  }
-  function jiggle(){
-    items.forEach(x=>{
-      const delta = (Math.random()-0.5)*0.6; // ±0.3%
-      x.d = Math.max(Math.min(x.d+delta, +3), -3);
-      x.p = +(x.p*(1+delta/100)).toFixed(2);
-    });
-    paintTicker();
-  }
-  paintTicker();
-  setInterval(jiggle, 2200);
-
-  // FAQ akordeon
-  document.querySelectorAll('.faq .item .q').forEach(q=>{
-    q.addEventListener('click', ()=>{
-      const a = q.parentElement.querySelector('.a');
-      const open = a.style.display==='block';
-      a.style.display = open?'none':'block';
-      q.querySelector('span').textContent = open?'+':'−';
-    });
-  });
-</script>
 </body>
 </html>
